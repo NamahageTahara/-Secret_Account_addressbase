@@ -1,0 +1,21 @@
+[package]
+name = "secret_account"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]     # Create a dynamic library to be loaded from another language
+
+[dependencies]
+eng-wasm = "0.1"
+eng-wasm-derive = "0.1"
+serde = "1.0.84"
+hex = "0.4.0"
+enigma-crypto = { path = "./enigma-crypto", default-features = false, features = ["asymmetric", "hash"] }
+rust-hex = "2.0.1"
+
+[profile.release]           # The release profile, used for `cargo build --release`.
+panic = "abort"             # panic strategy (`-C panic=...`)
+lto = true                  # Link Time Optimization usually reduces size of binaries
+                            # and static libraries. Increases compilation time.
+                            # If true, passes `-C lto` flag to the compiler
+opt-level = "z"  
