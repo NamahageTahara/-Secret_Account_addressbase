@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_OP=/Users/taharahiroki/Documents/GitHub/Secret_Account_addressbase/secret_contracts/contract/target/wasm32-unknown-unknown/release/build/typenum-1bfba50f41a2e7ca/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/taharahiroki/Documents/GitHub/Secret_Account_addressbase/secret_contracts/contract/target/wasm32-unknown-unknown/release/build/typenum-1bfba50f41a2e7ca/out/op.rs

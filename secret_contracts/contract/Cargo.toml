@@ -1,5 +1,5 @@
 [package]
-name = "secret_account"
+name = "contract"
 version = "0.1.0"
 
 [lib]
@@ -10,8 +10,8 @@ eng-wasm = "0.1"
 eng-wasm-derive = "0.1"
 serde = "1.0.84"
 hex = "0.4.0"
-enigma-crypto = { path = "./enigma-crypto", default-features = false, features = ["asymmetric", "hash"] }
-rust-hex = "2.0.1"
+rustc-hex = "2.0.1"
+enigma-crypto = { path = "../enigma-core/enigma-crypto", default-features = false, features = ["asymmetric", "hash"] }
 
 [profile.release]           # The release profile, used for `cargo build --release`.
 panic = "abort"             # panic strategy (`-C panic=...`)
