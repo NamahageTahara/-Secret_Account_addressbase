@@ -19,6 +19,7 @@ static USER_ID: &str = "ID_";
 
 pub type Id = String;
 pub type Pass = String;
+pub type AccountInfo = (Id, Pass, H160);
 
 
 #[derive(Serialize, Deserialize, Default)]
@@ -172,14 +173,14 @@ impl Contract {
 
     fn is_exist(id: &Id) -> bool {
         match Self::get_by_id(id) {
-            Some(account) => true,
+            Some(_account) => true,
             None => false,
         }
     }
 
     fn is_exist_address(address: &H160) -> bool {
         match Self::get_by_address(address) {
-            Some(account) => true,
+            Some(_account) => true,
             None => false,
         }
     }
@@ -190,6 +191,16 @@ impl Contract {
         let address_string = &make_address_string(&account.current_address);
         write_state!(id_string => account);
         write_state!(address_string => id);
+    }
+
+    fn show_data(id: &Id, pass: &Pass) -> Option<AccountInfo> {
+        match Self::authorize_by_pass(id, pass) {
+            Authorize::ACCEPT => {
+                let account = &Self::get_by_id(id).unwrap();
+                Some((account.id.to_string(), account.pass.to_string(), account.current_address))
+            },
+            Authorize::DENY => None
+        }
     }
 }
 
@@ -203,6 +214,7 @@ pub trait ContractInterface {
     fn pub_reset_pass(id:Id, pass: Pass, new_pass: Pass) -> bool;
     fn pub_reset_address(id: Id, pass: Pass, new_address: H160) -> bool;
     fn pub_reset_pass_by_addr(address: H160, new_id: Id, new_pass: Pass, sig: Vec<u8>) -> bool;
+    fn pub_show_data(id: Id, pass: Pass) -> AccountInfo;
 } 
 
 // Implementation of the public-facing secret contract functions defined in the ContractInterface
@@ -250,5 +262,10 @@ impl ContractInterface for Contract {
         let new_account = Self::reset_pass_by_addr(address, new_id, new_pass, sig).unwrap_or_default();
         Self::register_in_state(new_account);
         return true
+    }
+
+    #[no_mangle]
+    fn pub_show_data(id: Id, pass: Pass) -> AccountInfo {
+        Self::show_data(&id, &pass).unwrap_or_default()
     }
 }
